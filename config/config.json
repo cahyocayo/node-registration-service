@@ -1,0 +1,9 @@
+{
+    "environment": "master",
+    "sql": {
+      "host": "localhost",
+      "database": "cloud-ace-test",
+      "user": "root",
+      "password": "password"
+    }
+}

@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: APP_NAME
+  namespace: DEPLOY_ENV
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: APP_NAME
+  template:
+    metadata:
+      labels:
+        app: APP_NAME
+    spec:
+      containers:
+      - name: APP_NAME
+        image: CONTAINER_IMAGE
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          name: "http"
+        env:
+          - name: EKS_ENV
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+  name: APP_NAME
+  namespace: DEPLOY_ENV
+spec:
+  selector:
+    app: APP_NAME
+  ports:
+  - name: web
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: APP_NAME
+  namespace: DEPLOY_ENV
+spec:
+  rules:
+  - host: HOST_URL
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: APP_NAME
+          servicePort: web
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: APP_NAME
+spec:
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: APP_NAME
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPUUtilizationPercentage: 50

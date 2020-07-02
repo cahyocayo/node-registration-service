@@ -1,0 +1,17 @@
+{
+    "00": {
+      "in": "Sukses",
+      "id": "Sukses",
+      "en": "Success"
+    },
+    "401": {
+      "in": "Unauthorized",
+      "id": "Unauthorized",
+      "en": "Unauthorized"
+    },
+    "500": {
+      "in": "Internal error",
+      "id": "Internal error",
+      "en": "Internal error"
+    }
+}
